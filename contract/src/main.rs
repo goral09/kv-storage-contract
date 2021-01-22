@@ -4,7 +4,7 @@ extern crate alloc;
 use alloc::{collections::BTreeSet, string::String};
 use std::convert::TryInto;
 
-use casperlabs_contract_macro::{casperlabs_constructor, casperlabs_contract, casperlabs_method};
+use casperlabs_contract_macro::{casperlabs_constructor, casperlabs_contract};
 
 use contract::{
     contract_api::{runtime, storage},
@@ -14,12 +14,12 @@ use contract::{
 use types::{
     bytesrepr::ToBytes,
     contracts::{EntryPoint, EntryPointAccess, EntryPointType, EntryPoints},
-    runtime_args, CLType, CLTyped, CLValue, Group, Parameter, RuntimeArgs, URef,
+    runtime_args, CLType, CLTyped, CLValue, Group, RuntimeArgs, URef,
 };
 /// The name of the key under which the string will be stored
 const KEY: &str = "special_value";
 /// The value of the string to be stored
-const ARG_MESSAGE: &str = "hello world";
+const ARG_MESSAGE: &str = "$CONTENT";
 
 #[casperlabs_contract]
 mod hello_world {
@@ -28,11 +28,6 @@ mod hello_world {
     fn init() {
         let value = String::from(ARG_MESSAGE);
         set_key(KEY, value);
-    }
-
-    #[casperlabs_method]
-    fn update(value: String) {
-        set_key(KEY, value)
     }
 
     fn set_key<T: ToBytes + CLTyped>(name: &str, value: T) {
